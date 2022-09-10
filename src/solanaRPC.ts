@@ -189,12 +189,6 @@ export default class SolanaRpc {
       await this.initWallet();
     }
     try {
-      const solanaWallet = new SolanaWallet(this.provider);
-      const connectionConfig = await solanaWallet.request<CustomChainConfig>({ method: "solana_provider_config", params: [] });
-      const conn = new Connection(connectionConfig.rpcTarget);
-
-      const accounts = await solanaWallet.requestAccounts();
-      // const balance = await conn.getBalance(new PublicKey(accounts[0]));
       return `Wallet Balance: ${await this.program.provider.connection.getBalance(this.program.provider.wallet.publicKey) / LAMPORTS_PER_SOL}`;
     } catch (error) {
       return error as string;
