@@ -1,11 +1,11 @@
 import * as anchor from "@project-serum/anchor";
-import { Connection, Keypair, LAMPORTS_PER_SOL, PublicKey, SystemProgram, Transaction } from "@solana/web3.js";
+import { Connection, LAMPORTS_PER_SOL, PublicKey, SystemProgram, Transaction } from "@solana/web3.js";
 import { CustomChainConfig, SafeEventEmitterProvider } from "@web3auth/base";
 import { SolanaWallet } from "@web3auth/solana-provider";
 import { Program } from "@project-serum/anchor";
 import idl from "./idl.json"
 import {IDL} from "./increment_pda";
-import { bs58 } from "@project-serum/anchor/dist/cjs/utils/bytes";
+// import { bs58 } from "@project-serum/anchor/dist/cjs/utils/bytes";
 class swallet extends SolanaWallet {
   publicKey:PublicKey;
   constructor(publicKey:PublicKey, provider: SafeEventEmitterProvider) {
@@ -33,7 +33,7 @@ export default class SolanaRpc {
     }
     try {
       const solanaWallet = new SolanaWallet(this.provider);
-      const acc = await solanaWallet.requestAccounts();
+      // const acc = await solanaWallet.requestAccounts();
       [counter1Pda, counter1Bump] = await anchor.web3.PublicKey.findProgramAddress(
         [
           this.program.provider.wallet.publicKey.toBuffer()

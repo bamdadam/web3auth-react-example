@@ -4,7 +4,7 @@ import { CHAIN_NAMESPACES, SafeEventEmitterProvider, WALLET_ADAPTERS} from "@web
 import { OpenloginAdapter } from "@web3auth/openlogin-adapter";
 import RPC from "./solanaRPC";
 import "./App.css";
-import { Web3Auth } from "@web3auth/web3auth";
+// import { Web3Auth } from "@web3auth/web3auth";
 
 
 const clientId = "BOGCsjTvqsl_3CnYyb9Q9lmKwQmmiji9useH660p1GC5cRU_B3MqnsRdL3u36rM6IxOYsVjKmu-Pck0dhZ_0Gq4"; // get from https://dashboard.web3auth.io
@@ -119,7 +119,7 @@ function App() {
     console.log(balance);
   };
 
-  const sendTransaction = async () => {
+  const initCounter = async () => {
     if (!provider) {
       console.log("provider not initialized yet");
       return;
@@ -129,7 +129,7 @@ function App() {
     console.log(receipt);
   };
 
-  const signMessage = async () => {
+  const incrementCounter = async () => {
     if (!provider) {
       console.log("provider not initialized yet");
       return;
@@ -159,11 +159,11 @@ function App() {
       <button onClick={getBalance} className="card">
         Get Balance
       </button>
-      <button onClick={sendTransaction} className="card">
-        Send Transaction
+      <button onClick={initCounter} className="card">
+        initCounter
       </button>
-      <button onClick={signMessage} className="card">
-        Sign Message
+      <button onClick={incrementCounter} className="card">
+        incrementCounter
       </button>
       <button onClick={getPrivateKey} className="card">
         Get Private Key
