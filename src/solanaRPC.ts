@@ -194,7 +194,7 @@ export default class SolanaRpc {
       const conn = new Connection(connectionConfig.rpcTarget);
 
       const accounts = await solanaWallet.requestAccounts();
-      const balance = await conn.getBalance(new PublicKey(accounts[0]));
+      // const balance = await conn.getBalance(new PublicKey(accounts[0]));
       return `Wallet Balance: ${await this.program.provider.connection.getBalance(this.program.provider.wallet.publicKey) / LAMPORTS_PER_SOL}`;
     } catch (error) {
       return error as string;
