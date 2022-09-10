@@ -32,7 +32,7 @@ export default class SolanaRpc {
       await this.initWallet();
     }
     try {
-      const solanaWallet = new SolanaWallet(this.provider);
+      // const solanaWallet = new SolanaWallet(this.provider);
       // const acc = await solanaWallet.requestAccounts();
       [counter1Pda, counter1Bump] = await anchor.web3.PublicKey.findProgramAddress(
         [
