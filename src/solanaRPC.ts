@@ -16,6 +16,7 @@ class swallet extends SolanaWallet {
 let counter1Pda: PublicKey;
 let counter1Bump: number;
 export default class SolanaRpc {
+  
   private provider: SafeEventEmitterProvider;
   private programID = new PublicKey(idl.metadata.address);
   private wallet:any;
@@ -47,11 +48,56 @@ export default class SolanaRpc {
                                           })
                                           .signers([])
                                           .rpc();
+      // console.log((await this.program.account.counter.fetch(counter1Pda)).count.toNumber());
+      console.log(await this.showCounter());
       return sig;
     } catch (error) {
       return error as string[];
     }
   };
+
+  showCounter = async ():Promise<string> => {
+    if (!this.isWalletInit) {
+      console.log("making anchor program");
+      await this.initWallet();
+    }
+    try {
+      [counter1Pda, counter1Bump] = await anchor.web3.PublicKey.findProgramAddress(
+        [
+          this.program.provider.wallet.publicKey.toBuffer()
+        ],
+        this.program.programId,
+      );  
+      return (await this.program.account.counter.fetch(counter1Pda)).count.toNumber();
+    } catch (error) {
+      return error as string;
+    }
+  }
+  
+  Airdrop = async(): Promise<string> => {
+    if (!this.isWalletInit) {
+      console.log("making anchor program");
+      
+      await this.initWallet();
+    }
+    try {
+      const airdropSignature = await this.program.provider.connection.requestAirdrop(
+        this.program.provider.wallet.publicKey,
+        1 * LAMPORTS_PER_SOL
+      );
+      const latestBlockHash = await this.program.provider.connection.getLatestBlockhash();
+      let sig = await this.program.provider.connection.confirmTransaction({
+        blockhash: latestBlockHash.blockhash,
+        lastValidBlockHeight: latestBlockHash.lastValidBlockHeight,
+        signature: airdropSignature
+      });
+      return await this.program.provider.connection.getBalance(this.program.provider.wallet.publicKey)
+      // throw new Error("Method not implemented.");
+    } catch (error) {
+      return error as string;
+    }
+    
+  }
 
   initWallet = async (): Promise<string> => {
     try {
@@ -87,7 +133,7 @@ export default class SolanaRpc {
         ],
         this.program.programId,
       );      
-      let tri = await this.program.methods.initialize(
+      let sig = await this.program.methods.initialize(
         counter1Bump,
       ).accounts({
         payer:new PublicKey(userAcc[0]),
@@ -95,7 +141,7 @@ export default class SolanaRpc {
         systemProgram:anchor.web3.SystemProgram.programId,
         authority: new PublicKey(userAcc[0])
       }).rpc();
-      return tri;
+      return sig;
     //   const latestblockhash = await conn.getLatestBlockhash()
     // const trx = new Transaction({
     //   feePayer:wallet.publicKey,

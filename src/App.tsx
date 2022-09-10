@@ -129,6 +129,26 @@ function App() {
     console.log(receipt);
   };
 
+  const Airdrop = async () => {
+    if (!provider) {
+      console.log("provider not initialized yet");
+      return;
+    }
+    const rpc = new RPC(provider);
+    const signedMessage = await rpc.Airdrop();
+    console.log(signedMessage);
+  };
+
+  const showCounter = async () => {
+    if (!provider) {
+      console.log("provider not initialized yet");
+      return;
+    }
+    const rpc = new RPC(provider);
+    const signedMessage = await rpc.showCounter();
+    console.log(signedMessage);
+  };
+
   const incrementCounter = async () => {
     if (!provider) {
       console.log("provider not initialized yet");
@@ -159,11 +179,17 @@ function App() {
       <button onClick={getBalance} className="card">
         Get Balance
       </button>
+      <button onClick={Airdrop} className="card">
+        Airdrop 1 Sol
+      </button>
       <button onClick={initCounter} className="card">
         initCounter
       </button>
       <button onClick={incrementCounter} className="card">
         incrementCounter
+      </button>
+      <button onClick={showCounter} className="card">
+        Show Counter
       </button>
       <button onClick={getPrivateKey} className="card">
         Get Private Key
