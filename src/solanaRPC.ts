@@ -73,7 +73,7 @@ export default class SolanaRpc {
       return error as string;
     }
   }
-  
+
   Airdrop = async(): Promise<string> => {
     if (!this.isWalletInit) {
       console.log("making anchor program");
@@ -86,7 +86,7 @@ export default class SolanaRpc {
         1 * LAMPORTS_PER_SOL
       );
       const latestBlockHash = await this.program.provider.connection.getLatestBlockhash();
-      let sig = await this.program.provider.connection.confirmTransaction({
+      await this.program.provider.connection.confirmTransaction({
         blockhash: latestBlockHash.blockhash,
         lastValidBlockHeight: latestBlockHash.lastValidBlockHeight,
         signature: airdropSignature
