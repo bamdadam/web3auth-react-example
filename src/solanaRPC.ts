@@ -26,9 +26,9 @@ export default class SolanaRpc {
     this.provider = provider;
   }
 
-  incrementCounter = async (): Promise<string[]> => {
+  incrementCounter = async (): Promise<string> => {
     if (!this.isWalletInit) {
-      console.log("making anchor program");
+      // console.log("making anchor program");
       
       await this.initWallet();
     }
@@ -50,15 +50,15 @@ export default class SolanaRpc {
                                           .rpc();
       // console.log((await this.program.account.counter.fetch(counter1Pda)).count.toNumber());
       console.log(await this.showCounter());
-      return sig;
+      return `Transaction Signature: ${sig}`;
     } catch (error) {
-      return error as string[];
+      return error as string;
     }
   };
 
   showCounter = async ():Promise<string> => {
     if (!this.isWalletInit) {
-      console.log("making anchor program");
+      // console.log("making anchor program");
       await this.initWallet();
     }
     try {
@@ -68,7 +68,7 @@ export default class SolanaRpc {
         ],
         this.program.programId,
       );  
-      return (await this.program.account.counter.fetch(counter1Pda)).count.toNumber();
+      return `Counter Value is: ${(await this.program.account.counter.fetch(counter1Pda)).count.toNumber()}`;
     } catch (error) {
       return error as string;
     }
@@ -76,7 +76,7 @@ export default class SolanaRpc {
 
   Airdrop = async(): Promise<string> => {
     if (!this.isWalletInit) {
-      console.log("making anchor program");
+      // console.log("making anchor program");
       
       await this.initWallet();
     }
@@ -91,7 +91,7 @@ export default class SolanaRpc {
         lastValidBlockHeight: latestBlockHash.lastValidBlockHeight,
         signature: airdropSignature
       });
-      return await this.program.provider.connection.getBalance(this.program.provider.wallet.publicKey)
+      return `Wallet Balance is: ${await this.program.provider.connection.getBalance(this.program.provider.wallet.publicKey) / LAMPORTS_PER_SOL}`
       // throw new Error("Method not implemented.");
     } catch (error) {
       return error as string;
@@ -110,7 +110,7 @@ export default class SolanaRpc {
       const provider = new anchor.AnchorProvider(conn, wallet, anchor.AnchorProvider.defaultOptions());
       anchor.setProvider(provider);
       this.program = new Program(IDL, this.programID,provider);
-      console.log("init wallet done");
+      // console.log("init wallet done");
       return "done";
     } catch (error) {
       return error as string;
@@ -119,7 +119,7 @@ export default class SolanaRpc {
 
   initCounter = async (): Promise<string> => {
     if (!this.isWalletInit) {
-      console.log("making anchor program");
+      // console.log("making anchor program");
       
       await this.initWallet();
     }
@@ -141,7 +141,8 @@ export default class SolanaRpc {
         systemProgram:anchor.web3.SystemProgram.programId,
         authority: new PublicKey(userAcc[0])
       }).rpc();
-      return sig;
+      console.log(await this.showCounter());
+      return `Transaction Signature: ${sig}`;
     //   const latestblockhash = await conn.getLatestBlockhash()
     // const trx = new Transaction({
     //   feePayer:wallet.publicKey,
@@ -183,6 +184,10 @@ export default class SolanaRpc {
   };
 
   getBalance = async (): Promise<string> => {
+    if (!this.isWalletInit) {
+      // console.log("making anchor program");
+      await this.initWallet();
+    }
     try {
       const solanaWallet = new SolanaWallet(this.provider);
       const connectionConfig = await solanaWallet.request<CustomChainConfig>({ method: "solana_provider_config", params: [] });
@@ -190,7 +195,7 @@ export default class SolanaRpc {
 
       const accounts = await solanaWallet.requestAccounts();
       const balance = await conn.getBalance(new PublicKey(accounts[0]));
-      return balance.toString();
+      return `Wallet Balance: ${await this.program.provider.connection.getBalance(this.program.provider.wallet.publicKey) / LAMPORTS_PER_SOL}`;
     } catch (error) {
       return error as string;
     }
